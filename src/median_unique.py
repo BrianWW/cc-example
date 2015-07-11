@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+
+import sys
+
 def median(mylist):
     sorts = sorted(mylist)
     length = len(sorts)
@@ -8,17 +11,28 @@ def median(mylist):
     return sorts[length / 2]
 
 def read_words(words_file):
-        return [word for line in open(words_file, 'r') for word in line.split()]
+    return [word for line in open(words_file, 'r') for word in line.split()]
 
+def main():
+    if len(sys.argv) == 3:
+        file_input = open(sys.argv[1],"r")
+        file_output = open(sys.argv[2],"w")
+    elif len(sys.argv) ==1:
+        file_input=open("tweet_input/tweets.txt","r")
+        file_output=open("tweet_output/ft2.txt","w")
+    else:
+        print 'usage: ./median_unique.py fileinput fileoutput'
+        sys.exit(1)
 
-file_input=open("tweet_input/tweets.txt","r")
-file_output=open("tweet_output/ft2.txt","w")
+    unique_word_count = []
 
+    for tweet in file_input:
+        unique_word_count.append(len(set(w.lower() for w in tweet.split())))
+        print median(unique_word_count)
+        file_output.write( str(median(unique_word_count)) + "\n")
 
-unique_word_count = []
+    file_input.close()
+    file_output.close()
 
-for tweet in file_input:
-    unique_word_count.append(len(set(w.lower() for w in tweet.split())))
-    print median(unique_word_count)
-    file_output.write( str(median(unique_word_count)) + "\n")
-
+if __name__ == '__main__':
+    main()
